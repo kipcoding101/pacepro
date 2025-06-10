@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Panel</title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
+</head>
+<body>
+  <header>
+    <h1>Admin Dashboard</h1>
+    <%= link_to "Main Site", root_path %>
+    <%= button_to "Logout", destroy_user_session_path, method: :delete %>
+  </header>
+
+  <main>
+    <%= yield %>
+  </main>
+</body>
+</html>
