@@ -1,38 +1,34 @@
 # app/jobs/csv_processing_job.rb
+require 'csv'
+
 class CsvProcessingJob < ApplicationJob
   queue_as :default
 
-  def perform(csv_content, admin_id)
-    admin = Admin.find(admin_id)
-    
-    CSV.parse(csv_content, headers: true).each.with_index(2) do |row, line_number|
+  def perform(event_id, csv_content)
+    event = Event.find(event_id)
+    clean = csv_content.force_encoding('UTF-8').sub(/\A\uFEFF/, '')
+
+    CSV.parse(clean, headers: true).each_with_index do |row, index|
+      next if row.to_h.values.all?(&:blank?)
+
+      row_hash     = row.to_h
+      race_number  = row_hash['RaceNumber']
+
+      record = Result.where(event_id: event.id)
+                  .where("raw_data ->> 'RaceNumber' = ?", race_number)
+                  .first_or_initialize
+      record.raw_data = row_hash
+
       begin
-        result = RaceResult.new(
-          rider_name: row['rider_name'],
-          finish_time: row['finish_time'],
-          category: row['category'],
-          event_name: row['event_name'], # Optional field
-          processed_by: admin
-        )
-        
-        result.save!
+        record.save!
       rescue => e
-        log_error(e, line_number, admin)
+        ErrorLog.create!(
+          user: admin,
+          event: event,
+          message: "Line #{index + 2} error: #{e.message}",
+          details: row_hash
+        )
       end
     end
-  end
-
-  private
-
-  def log_error(error, line_number, admin)
-    ErrorLog.create!(
-      admin: admin,
-      message: "CSV Line #{line_number} Error: #{error.message}",
-      details: {
-        line_number: line_number,
-        error: error.inspect,
-        backtrace: error.backtrace.first(5)
-      }
-    )
   end
 end

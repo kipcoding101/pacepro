@@ -1,0 +1,42 @@
+<!-- app/views/events/show.html.erb -->
+
+<h1 class="text-2xl font-bold mb-4"><%= @event.title %> — Results</h1>
+
+<table class="table w-full table-zebra">
+  <thead>
+    <tr>
+      <th>Pos</th>
+      <th>Race Number</th>
+      <th>Name</th>
+      <th>Category</th>
+      <th>Race Time</th>
+      <th>Behind Time</th>
+      <th>Penalty</th>
+      <th>Stage 1</th>
+      <th>Stage 2</th>
+      <th>Stage 3</th>
+      <th>Stage 4</th>
+      <th>Stage 5</th>
+    </tr>
+  </thead>
+  <tbody>
+  <pre><%# @results.inspect %></pre>
+
+    <% @results.each do |result| %>
+      <tr>
+        <td><%= result["Position"] %></td>
+        <td><%= result["RaceNumber"] %></td>
+        <td><%= result["Name (Free Format)"] %></td>
+        <td><%= result["Category"] %></td>
+        <td><%= result["RaceTime"] %></td>
+        <td><%= result["BehindTime"] %></td>
+        <td><%= result["PenaltyScore"] %></td>
+        <td><%= result["STAGE 1 Time"] %></td>
+        <td><%= result["STAGE 2 Time"] %></td>
+        <td><%= result["STAGE 3 Time"] %></td>
+        <td><%= result["STAGE 4 Time"] %></td>
+        <td><%= result["STAGE 5 Time"] %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

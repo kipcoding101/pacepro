@@ -1,59 +1,41 @@
 # app/services/csv_processor.rb
+require 'csv'
+
 class CsvProcessor
-  include ActiveModel::Validations
-  
-  REQUIRED_COLUMNS = %w[rider_name finish_time category].freeze
-  
-  validate :required_columns_present
-  validate :valid_csv_format
+  class InvalidCSVError < StandardError; end
 
-  def initialize(csv_content, admin)
-    @csv_content = csv_content
-    @admin = admin
-    @errors = []
-  end
+  REQUIRED_COLUMNS = [
+    "RaceNumber", "CardNumbers", "MembershipNumbers", "Name (Free Format)",
+    "Category", "Club", "Country", "CourseClass", "StartTime", "FinishTime",
+    "RaceTime", "NonCompetitive", "Position", "Status", "Handicap",
+    "PenaltyScore", "ManualScoreAdjust", "FinalScore", "HandicapTime",
+    "HandicapScore", "AwardLevel", "EntrySystemIDs", "Eligibility",
+    "JourneyTime", "ExcludedExcess", "BehindTime", "GenderDOB", "Forenames",
+    "Surnames", "STAGE 1 Time", "STAGE 1 Pos", "STAGE 2 Time", "STAGE 2 Pos",
+    "STAGE 3 Time", "STAGE 3 Pos", "STAGE 4 Time", "STAGE 4 Pos",
+    "STAGE 5 Time", "STAGE 5 Pos", "STAGE 6 Time", "STAGE 6 Pos",
+    "STAGE 7 Time", "STAGE 7 Pos", "STAGE 8 Time", "STAGE 8 Pos",
+    "LiaisonExcess"
+  ].freeze
 
-  def process
-    return false unless valid?
-    
-    CsvProcessingJob.perform_later(@csv_content, @admin.id)
-  end
+  def self.validate_structure!(csv_data)
+    # 1) Force the string into UTF-8 (no incompatible BINARY)
+    utf8_data = csv_data.force_encoding('UTF-8')
+    # 2) Remove any leading BOM character (Unicode FEFF)
+    clean_data = utf8_data.sub(/\A\uFEFF/, '')
 
-  def job_id
-    @job_id ||= SecureRandom.uuid
-  end
+    # 3) Parse with headers
+    csv     = CSV.new(clean_data, headers: true)
+    headers = csv.first&.headers || []
 
-  private
-
-  def required_columns_present
-    return if csv_headers & REQUIRED_COLUMNS == REQUIRED_COLUMNS
-    
-    errors.add(:base, "CSV missing required columns: #{REQUIRED_COLUMNS.join(', ')}")
-  end
-
-  def valid_csv_format
-    CSV.parse(@csv_content, headers: true) do |row|
-      validate_row(row)
+    # 4) Check for missing columns
+    missing = REQUIRED_COLUMNS - headers
+    if missing.any?
+      raise InvalidCSVError, "Missing columns: #{missing.join(', ')}"
     end
+
+    true
   rescue CSV::MalformedCSVError => e
-    errors.add(:base, "Invalid CSV format: #{e.message}")
-  end
-
-  def validate_row(row)
-    REQUIRED_COLUMNS.each do |col|
-      errors.add(:base, "Missing #{col} in row #{row}") if row[col].blank?
-    end
-    
-    if row['finish_time'].present? && !numeric?(row['finish_time'])
-      errors.add(:base, "Invalid finish_time in row #{row}")
-    end
-  end
-
-  def csv_headers
-    @csv_headers ||= CSV.parse(@csv_content, headers: true)&.headers || []
-  end
-
-  def numeric?(str)
-    true if Float(str) rescue false
+    raise InvalidCSVError, "Invalid CSV format: #{e.message}"
   end
 end

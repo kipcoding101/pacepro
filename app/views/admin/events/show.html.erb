@@ -1,0 +1,18 @@
+<!-- app/views/admin/events/show.html.erb -->
+<h1 class="text-2xl font-bold mb-4"><%= @event.title %></h1>
+<ul class="list-disc ml-6 space-y-1">
+  <li><strong>Date:</strong> <%= @event.date %></li>
+  <li><strong>Location:</strong> <%= @event.location %></li>
+  <li><strong>Published:</strong> <%= @event.result_published ? "Yes" : "No" %></li>
+  <li><strong>Form URL:</strong>
+    <%= link_to @event.google_form_url, @event.google_form_url, target: "_blank" %>
+  </li>
+  <li><strong>Description:</strong><br/>
+    <%= simple_format(@event.description) %>
+  </li>
+</ul>
+
+<div class="mt-4 space-x-2">
+  <%= link_to "Edit", edit_admin_event_path(@event), class: "btn btn-secondary" %>
+  <%= link_to "Back", admin_events_path, class: "btn btn-link" %>
+</div>

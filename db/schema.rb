@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_28_075430) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_25_085019) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -20,6 +20,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_28_075430) do
     t.datetime "last_used_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "revoked", default: false, null: false
+    t.index ["revoked"], name: "index_api_keys_on_revoked"
     t.index ["token"], name: "index_api_keys_on_token", unique: true
     t.index ["user_id"], name: "index_api_keys_on_user_id"
   end
@@ -30,7 +32,28 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_28_075430) do
     t.jsonb "details"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "event_id", null: false
+    t.index ["event_id"], name: "index_error_logs_on_event_id"
     t.index ["user_id"], name: "index_error_logs_on_user_id"
+  end
+
+  create_table "events", force: :cascade do |t|
+    t.string "title"
+    t.date "date"
+    t.string "location"
+    t.text "description"
+    t.string "google_form_url"
+    t.boolean "result_published", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "results", force: :cascade do |t|
+    t.bigint "event_id", null: false
+    t.jsonb "raw_data", default: {}, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["event_id"], name: "index_results_on_event_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -47,5 +70,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_28_075430) do
   end
 
   add_foreign_key "api_keys", "users"
+  add_foreign_key "error_logs", "events"
   add_foreign_key "error_logs", "users"
+  add_foreign_key "results", "events"
 end

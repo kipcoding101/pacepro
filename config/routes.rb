@@ -1,9 +1,12 @@
 Rails.application.routes.draw do
-  get 'home', to: 'static_pages#home'
-  get 'about', to: 'static_pages#about'
-  get 'services', to: 'static_pages#services'
-  get 'events', to: 'static_pages#events'
-  root 'static_pages#home'
+  get "events/show"
+  get 'home', to: 'pages#home'
+  get 'about', to: 'pages#about'
+  get 'services', to: 'pages#services'
+  get 'events', to: 'pages#events'
+  resources :events, only: [:show]
+
+  root 'pages#home'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -14,11 +17,14 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      post '/csv-processor', to: 'csv_processor#create'
+      post '/events/:event_id/process_csv', to: 'csv_processor#create'
     end
   end
 
   namespace :admin do
+    resources :error_logs, only: [:index, :show]
+    resources :events
+    resources :api_keys, only: [:index, :create, :destroy]
     get 'dashboard', to: 'dashboard#index'
     root to: 'dashboard#index' # /admin
   end

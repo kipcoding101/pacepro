@@ -1,0 +1,34 @@
+<!-- app/views/admin/events/_form.html.erb -->
+<%= form_with(model: [:admin, @event], local: true) do |f| %>
+  <div class="grid grid-cols-1 gap-4">
+    <div class="form-control">
+      <%= f.label :title, class: "label" %>
+      <%= f.text_field :title, class: "input input-bordered", required: true %>
+    </div>
+    <div class="form-control">
+      <%= f.label :date, class: "label" %>
+      <%= f.date_field :date, class: "input input-bordered", required: true %>
+    </div>
+    <div class="form-control">
+      <%= f.label :location, class: "label" %>
+      <%= f.text_field :location, class: "input input-bordered" %>
+    </div>
+    <div class="form-control">
+      <%= f.label :description, class: "label" %>
+      <%= f.text_area :description, rows: 4, class: "textarea textarea-bordered" %>
+    </div>
+    <div class="form-control">
+      <%= f.label :google_form_url, "Google Form URL", class: "label" %>
+      <%= f.url_field :google_form_url, class: "input input-bordered" %>
+    </div>
+    <div class="form-control">
+      <label class="label cursor-pointer space-x-2">
+        <%= f.check_box :result_published, class: "toggle toggle-primary" %>
+        <span class="label-text">Results Published</span>
+      </label>
+    </div>
+    <div class="form-control mt-4">
+      <%= f.submit class: "btn btn-primary" %>
+    </div>
+  </div>
+<% end %>

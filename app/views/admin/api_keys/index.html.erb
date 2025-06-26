@@ -1,0 +1,33 @@
+<h1 class="text-2xl font-bold mb-4">API Keys</h1>
+
+<%= button_to 'Generate API Key', admin_api_keys_path,
+      method: :post,
+      class: 'btn btn-primary mb-4' %>
+
+<table class="table w-full table-zebra">
+  <thead>
+    <tr>
+      <th>Token</th>
+      <th>Last Used At</th>
+      <th>Revoked?</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @api_keys.each do |key| %>
+      <tr>
+        <td class="font-mono text-sm break-all"><%= key.token %></td>
+        <td><%= key.last_used_at || '—' %></td>
+        <td><%= key.revoked? ? 'Yes' : 'No' %></td>
+        <td>
+          <% unless key.revoked? %>
+            <%= button_to 'Revoke', admin_api_key_path(key),
+                  method: :delete,
+                  data: { confirm: 'Revoke this API key?' },
+                  class: 'btn btn-sm btn-error' %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

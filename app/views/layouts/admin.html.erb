@@ -5,17 +5,50 @@
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
   <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-  <%= javascript_importmap_tags %>
+  <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
 </head>
-<body>
-  <header>
-    <h1>Admin Dashboard</h1>
-    <%= link_to "Main Site", root_path %>
-    <%= button_to "Logout", destroy_user_session_path, method: :delete %>
-  </header>
+<body class="flex h-screen">
+  <aside class="w-64 bg-base-200 p-4">
+    <h2 class="text-xl font-bold mb-6">Admin</h2>
+    <ul class="menu menu-vertical">
+      <li>
+        <%= link_to 'Dashboard', admin_root_path,
+            class: (current_page?(admin_root_path) ? 'active' : '') %>
+      </li>
+      <li>
+        <%= link_to 'Events', admin_events_path,
+            class: (controller_name == 'events' ? 'active' : '') %>
+      </li>
+      <li>
+        <%= link_to 'Error Logs', admin_error_logs_path,
+            class: (controller_name == 'error_logs' ? 'active' : '') %>
+      </li>
+      <li>
+        <%= link_to 'API Keys', admin_api_keys_path,
+            class: (controller_name == 'api_keys' ? 'active' : '') %>
+      </li>
+      <li class="mt-4">
+        <%= link_to 'Main Site', root_path, class: 'btn btn-ghost w-full text-left' %>
+      </li>
+      <li class="mt-2">
+        <%= button_to 'Logout', destroy_user_session_path,
+              method: :delete,
+              class: 'btn btn-error w-full text-left' %>
+      </li>
+    </ul>
+  </aside>
 
-  <main>
-    <%= yield %>
-  </main>
+  <div class="flex-1 flex flex-col">
+    <header class="bg-base-100 p-4 shadow">
+      <h1 class="text-2xl font-semibold">
+        <%= content_for?(:title) ? yield(:title) : 'Admin Dashboard' %>
+      </h1>
+    </header>
+
+    <main class="p-6 overflow-auto">
+      <%= render 'shared/flash_messages' %>
+      <%= yield %>
+    </main>
+  </div>
 </body>
 </html>

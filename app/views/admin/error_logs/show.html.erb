@@ -1,0 +1,7 @@
+<h1>Error Log ##<%= @log.id %></h1>
+<p><strong>Time:</strong> <%= @log.created_at %></p>
+<p><strong>User:</strong> <%= @log.user.email %></p>
+<p><strong>Event:</strong> <%= @log.event.title %></p>
+<p><strong>Message:</strong> <%= @log.message %></p>
+<p><strong>Details:</strong></p>
+<pre><%= JSON.pretty_generate(@log.details) %></pre>

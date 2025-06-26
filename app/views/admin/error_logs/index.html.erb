@@ -1,0 +1,20 @@
+<h1>Error Logs</h1>
+<table>
+  <thead>
+    <tr>
+      <th>Time</th><th>User</th><th>Event</th><th>Message</th><th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @logs.each do |log| %>
+      <tr>
+        <td><%= log.created_at %></td>
+        <td><%= log.user.email %></td>
+        <td><%= log.event.title %></td>
+        <td><%= truncate(log.message, length: 50) %></td>
+        <td><%= link_to "Details", admin_error_log_path(log) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%# paginate @logs %>

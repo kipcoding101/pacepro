@@ -1,0 +1,16 @@
+<%= render 'layouts/header' %>
+
+<div class="container mx-auto px-4 py-8">
+  <h1 class="text-4xl font-bold mb-8">Our Services</h1>
+  
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <% ['Event Organization', 'Timing Systems', 'Route Planning'].each do |service| %>
+      <div class="card bg-base-100 shadow">
+        <div class="card-body">
+          <h2 class="card-title"><%= service %></h2>
+          <p>Description of <%= service.downcase %> service...</p>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
