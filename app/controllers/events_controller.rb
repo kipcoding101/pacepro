@@ -1,7 +1,7 @@
 # app/controllers/events_controller.rb
 class EventsController < ApplicationController
   def show
-    @event   = Event.find(params[:id])
+    @event = Event.find(params[:id])
     puts "Ini dia"
     puts "#{@event.id}"
     # Option A: sort in Ruby (fine for small result sets)
