@@ -23,5 +23,9 @@ module Pace
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+    # use Jakarta local time
+    config.time_zone = 'Asia/Jakarta'
+    # ensure ActiveRecord uses local zone for dates
+    config.active_record.default_timezone = :local
   end
 end
