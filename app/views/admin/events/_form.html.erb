@@ -27,6 +27,27 @@
         <span class="label-text">Results Published</span>
       </label>
     </div>
+
+    <div class="form-control">
+      <%= f.label :cover_image, class: "label" %>
+      <%= f.file_field :cover_image, class: "file-input file-input-bordered" %>
+      <% if @event.cover_image.attached? %>
+        <%= image_tag @event.cover_image.variant(resize_to_limit: [200,200]), class: "mt-2" %>
+      <% end %>
+    </div>
+
+    <div class="form-control">
+      <%= f.label :gallery_images, "Gallery Photos", class: "label" %>
+      <%= f.file_field :gallery_images, multiple: true, class: "file-input file-input-bordered" %>
+      <% if @event.gallery_images.attached? %>
+        <div class="grid grid-cols-4 gap-2 mt-2">
+          <% @event.gallery_images.each do |img| %>
+            <%= image_tag img.variant(resize_to_limit: [150,150]), class: "rounded" %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
     <div class="form-control mt-4">
       <%= f.submit class: "btn btn-primary" %>
     </div>

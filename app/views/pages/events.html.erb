@@ -26,7 +26,11 @@
       <%= link_to event_path(event), class: "block" do %>
         <div class="card card-compact w-64 bg-base-100 shadow-lg hover:shadow-2xl transition-shadow duration-200">
           <figure class="h-40 overflow-hidden">
-            <img src="" alt="<%= event.title %>" class="object-cover w-full h-full" />
+          <% if event.cover_image.attached? %>
+            <%= image_tag event.cover_image.variant(resize_to_limit: [800,300]),
+                          class: "object-cover w-full h-full" %>
+          <% end %>
+
           </figure>
           <div class="card-body p-4">
             <h2 class="card-title text-lg"><%= event.title %></h2>

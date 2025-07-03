@@ -16,4 +16,6 @@ class Event < ApplicationRecord
 
   has_many :results
   has_many :error_logs
+  has_one_attached :cover_image
+  has_many_attached :gallery_images
 end

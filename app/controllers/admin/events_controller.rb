@@ -52,6 +52,8 @@ class Admin::EventsController < Admin::BaseController
       :google_form_url,
       :result_published,
       :title,
+      :cover_image,
+      gallery_images: []
     )
   end
 end
