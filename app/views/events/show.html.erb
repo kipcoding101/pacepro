@@ -1,42 +1,105 @@
 <!-- app/views/events/show.html.erb -->
+<div class="max-w-4xl mx-auto py-8 space-y-6">
 
-<h1 class="text-2xl font-bold mb-4"><%= @event.title %> — Results</h1>
+  <!-- 1) Header -->
+  <div class="text-center space-y-2">
+    <%= image_tag "", height: 48, alt: "Pacepro" %>
+    <h2 class="text-2xl font-extrabold uppercase"><%= @event.title %></h2>
+    <p class="text-gray-600">
+      <%= @event.start_date.strftime("%-d %b %Y") %>
+       -
+      <%= @event.end_date.strftime("%-d %b %Y") %>
+    </p>
+    <h3 class="text-lg font-semibold mt-4">Overall Results</h3>
+    <div class="flex justify-center space-x-4 mt-2">
+      <%= link_to "Home", root_path, class: "btn btn-ghost" %>
+      <%= link_to "Results PDF", "#", class: "btn btn-primary" %>
+    </div>
+  </div>
 
-<table class="table w-full table-zebra">
-  <thead>
-    <tr>
-      <th>Pos</th>
-      <th>Race Number</th>
-      <th>Name</th>
-      <th>Category</th>
-      <th>Race Time</th>
-      <th>Behind Time</th>
-      <th>Penalty</th>
-      <th>Stage 1</th>
-      <th>Stage 2</th>
-      <th>Stage 3</th>
-      <th>Stage 4</th>
-      <th>Stage 5</th>
-    </tr>
-  </thead>
-  <tbody>
-  <pre><%# @results.inspect %></pre>
+  <!-- 2) Category + toggles -->
+  <div class="card bg-base-100 shadow">
+    <div class="card-body grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+      <%= form_with url: event_path(@event),
+                    method: :get,
+                    local: true,
+                    data: {
+                      controller:        "auto-submit",
+                      "auto-submit-target": "form"
+                    } do |f| %>
 
-    <% @results.each do |result| %>
-      <tr>
-        <td><%= result["Position"] %></td>
-        <td><%= result["RaceNumber"] %></td>
-        <td><%= result["Name (Free Format)"] %></td>
-        <td><%= result["Category"] %></td>
-        <td><%= result["RaceTime"] %></td>
-        <td><%= result["BehindTime"] %></td>
-        <td><%= result["PenaltyScore"] %></td>
-        <td><%= result["STAGE 1 Time"] %></td>
-        <td><%= result["STAGE 2 Time"] %></td>
-        <td><%= result["STAGE 3 Time"] %></td>
-        <td><%= result["STAGE 4 Time"] %></td>
-        <td><%= result["STAGE 5 Time"] %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+        <div class="form-control">
+          <label class="label"><span class="label-text">Course Class:</span></label>
+          <%= f.select :course_class,
+                options_for_select([["All", nil]] + @course_classes.map { |c| [c, c] },
+                                   @selected_course_class),
+                {},
+                data: { action: "change->auto-submit#submit" },
+                class: "select select-bordered w-full" %>
+        </div>
+
+        <div class="form-control">
+          <label class="cursor-pointer label">
+            <%= f.check_box :display_details, {class: "checkbox mr-2"}, "1", "0" %>
+            <span class="label-text">Display Details</span>
+          </label>
+          <label class="cursor-pointer label">
+            <%= f.check_box :display_events, {class: "checkbox mr-2"}, "1", "0" %>
+            <span class="label-text">Display Events</span>
+          </label>
+        </div>
+
+      <% end %>
+    </div>
+  </div>
+
+  <!-- 3) Search bar -->
+  <div class="card bg-base-100 shadow">
+    <div class="card-body">
+      <%= form_with url: event_path(@event), method: :get, local: true, class: "flex flex-wrap gap-2 items-center" do |f| %>
+        <span class="font-medium">Search:</span>
+        <%= f.select :search_field,
+             options_for_select([["Name", "Name (Free Format)"], ["Bib", "RaceNumber"]], params[:search_field]),
+             {}, class: "select select-bordered" %>
+        <%= f.select :search_op,
+             options_for_select([["Contains","contains"],["Equals","equals"]], params[:search_op]),
+             {}, class: "select select-bordered" %>
+        <%= f.text_field :search_query, value: params[:search_query], placeholder: "Term", class: "input input-bordered flex-1" %>
+        <%= f.submit "Find", class: "btn btn-success" %>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- 4) Results table -->
+  <div class="overflow-x-auto">
+    <table class="table table-zebra w-full">
+      <thead>
+        <tr>
+          <th>Standings</th>
+          <th>Bib</th>
+          <th>Name</th>
+          <th>Team</th>
+          <th>Race Time</th>
+          <th>Behind Time</th>
+          <th>Day 2</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @results.each do |r| %>
+          <tr>
+            <td><%= r["Position"] %></td>
+            <td><%= r["RaceNumber"] %></td>
+            <td><%= r["Name (Free Format)"] %></td>
+            <td><%= r["Club"].presence || "-" %></td>
+            <td><%= r["RaceTime"] %></td>
+            <td><%= r["BehindTime"].presence || "-" %></td>
+            <td>
+              <%= r["STAGE 2 Time"] %>
+              <span class="text-sm opacity-70"><%= r["STAGE 2 Pos"] %>nd</span>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

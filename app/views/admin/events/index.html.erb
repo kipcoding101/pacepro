@@ -8,7 +8,8 @@
   <thead>
     <tr>
       <th>Title</th>
-      <th>Date</th>
+      <th>Start Date</th>
+      <th>End Date</th>
       <th>Location</th>
       <th>Published</th>
       <th></th>
@@ -18,7 +19,8 @@
     <% @events.each do |e| %>
       <tr>
         <td><%= e.title %></td>
-        <td><%= e.date %></td>
+        <td><%= e.start_date %></td>
+        <td><%= e.end_date %></td>
         <td><%= e.location %></td>
         <td><%= e.result_published ? "Yes" : "No" %></td>
         <td class="space-x-2">

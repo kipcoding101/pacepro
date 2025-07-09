@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_02_093100) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_04_065439) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -67,13 +67,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_02_093100) do
 
   create_table "events", force: :cascade do |t|
     t.string "title"
-    t.date "date"
     t.string "location"
     t.text "description"
     t.string "google_form_url"
     t.boolean "result_published", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.date "start_date", null: false
+    t.date "end_date", null: false
   end
 
   create_table "results", force: :cascade do |t|
