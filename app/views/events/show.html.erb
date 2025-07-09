@@ -56,15 +56,19 @@
   <!-- 3) Search bar -->
   <div class="card bg-base-100 shadow">
     <div class="card-body">
-      <%= form_with url: event_path(@event), method: :get, local: true, class: "flex flex-wrap gap-2 items-center" do |f| %>
+      <%= form_with url: event_path(@event), method: :get, local: true,
+          class: "flex flex-wrap gap-2 items-center" do |f| %>
         <span class="font-medium">Search:</span>
-        <%= f.select :search_field,
+        <%# f.select :search_field,
              options_for_select([["Name", "Name (Free Format)"], ["Bib", "RaceNumber"]], params[:search_field]),
              {}, class: "select select-bordered" %>
-        <%= f.select :search_op,
+        <%# f.select :search_op,
              options_for_select([["Contains","contains"],["Equals","equals"]], params[:search_op]),
              {}, class: "select select-bordered" %>
-        <%= f.text_field :search_query, value: params[:search_query], placeholder: "Term", class: "input input-bordered flex-1" %>
+        <%= f.text_field :search_query,
+            value: params[:search_query],
+            placeholder: "Term",
+            class: "input input-bordered flex-1" %>
         <%= f.submit "Find", class: "btn btn-success" %>
       <% end %>
     </div>

@@ -27,10 +27,6 @@ class EventsController < ApplicationController
     @display_events       = params[:display_events] == "1"
 
     # load & order your results
-    @results = scope.order(
-          Arel.sql("raw_data ->> 'CourseClass' ASC"),
-          Arel.sql("(raw_data ->> 'Position')::int ASC")
-          )
     # 3️⃣ filter by CourseClass if one was chosen
     if @selected_course_class.present?
       @results = @results.select do |r|
@@ -39,5 +35,20 @@ class EventsController < ApplicationController
       end
       Rails.logger.debug "👉 filtered results count=#{@results.size}"
     end
+
+    # 1️⃣ add this block for live search on Name
+    if params[:search_query].present?
+      pattern = "%#{params[:search_query]}%"
+      scope = scope.where(
+        "raw_data ->> 'Name (Free Format)' ILIKE ?",
+        pattern
+        )
+      end
+
+      @results = scope.order(
+            Arel.sql("raw_data ->> 'CourseClass' ASC"),
+            Arel.sql("(raw_data ->> 'Position')::int ASC")
+            )
+
   end
 end
