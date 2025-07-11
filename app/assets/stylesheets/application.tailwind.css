@@ -5,5 +5,11 @@
   --font-sans: 'Work Sans', system-ui, sans-serif;
 }
 
+.hero{
+    background: url('hero2.webp') no-repeat;
+    background-size: cover;
+}
+
+
 /* ✅ Must come LAST */
 @plugin "./daisyui.js";

@@ -5,10 +5,12 @@
   --font-sans: 'Roboto', system-ui, sans-serif;
 }
 
-@layer components {
-    .btn_navbar{
-        @apply bg-red-500;
-    }
+
+
+@layer components{
+  .btn-navbar{
+    @apply hover:text-slate-50 duration-300 ease-in-out;
+  }
 }
 
 @plugin "daisyui";
