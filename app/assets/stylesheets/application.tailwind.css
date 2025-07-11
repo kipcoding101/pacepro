@@ -1,2 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&family=TikTok+Sans:opsz,wght@12..36,300..900&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
 @import "tailwindcss";
+
+:root {
+  --font-sans: 'Work Sans', system-ui, sans-serif;
+}
+
+/* ✅ Must come LAST */
 @plugin "./daisyui.js";
