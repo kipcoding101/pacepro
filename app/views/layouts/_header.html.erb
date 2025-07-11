@@ -3,11 +3,11 @@
     <%= link_to image_tag("logogram.png", :alt => "logo", :class => "max-w-[50px]"), root_path, class: '' %>
   </div>
   <div class="flex-1 text-center">
-    <ul class="menu menu-horizontal px-1 uppercase">
-      <li><%= link_to 'Home', root_path %></li>
-      <li><%= link_to 'About', about_path %></li>
-      <li><%= link_to 'Services', services_path %></li>
-      <li><%= link_to 'Events', events_path %></li>
+    <ul class="menu-horizontal gap-8 text-slate-50/50 px-1 uppercase">
+      <li><%= link_to 'Home', root_path, class: 'hover:text-slate-50 duration-300 ease-in-out btn-navbar' %></li>
+      <li><%= link_to 'About', about_path, class: 'hover:text-slate-50 duration-300 ease-in-out btn-navbar' %></li>
+      <li><%= link_to 'Services', services_path, class: 'hover:text-slate-50 duration-300 ease-in-out' %></li>
+      <li><%= link_to 'Events', events_path, class: 'hover:text-slate-50 duration-300 ease-in-out' %></li>
     </ul>
   </div>
 </header>
