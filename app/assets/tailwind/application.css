@@ -5,6 +5,10 @@
   --font-sans: 'Roboto', system-ui, sans-serif;
 }
 
+html,body{
+  height:100%;
+  margin: 0;
+}
 
 
 @layer components{

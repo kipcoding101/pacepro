@@ -1,9 +1,13 @@
 <%= link_to event_path(event), class: "block" do %>
-  <div class="card card-compact w-64 bg-base-100 shadow-lg hover:shadow-2xl transition-shadow duration-200">
+  <div class="card card-compact w-64 bg-gray-800 shadow-lg border-indigo-600 hover:shadow-2xl transition-shadow duration-200">
     <% if event.cover_image.attached? %>
       <figure class="h-40 overflow-hidden">
         <%= image_tag event.cover_image.variant(resize_to_limit: [256,160]),
                       class: "object-cover w-full h-full" %>
+      </figure>
+    <% else %>
+      <figure class="h-40 overflow-hidden">
+        <%= image_tag "hero1.webp", class: "object-cover w-full h-full" %>
       </figure>
     <% end %>
     <div class="card-body p-4">
