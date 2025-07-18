@@ -1,17 +1,27 @@
 <!-- app/views/events/show.html.erb -->
-<div class="max-w-4xl mx-auto py-8 space-y-6 pt-6">
 
+<div class="page-header page-services flex flex-col min-h-64 justify-center items-center bg-cover bg-[url(hero1.webp)] bg-center pt-4">
+  <div class="container">
+    <%= link_to :back, class: "btn btn-ghost" do %>
+      <%= image_tag("icons/left-arrow.svg", alt: "Icon", width: 25, class: "text-white" ) %>
+      Back
+    <% end %>
+      <div class="">
+        <h2 class="flex m-0 text-4xl text-white font-bold text-shadow-lg"><%= @event.title %></h2>
+        <p class="text-slate-50 mt-2">
+          <%= @event.start_date.strftime("%-d %b %Y") %>
+          -
+          <%= @event.end_date.strftime("%-d %b %Y") %>
+        </p>
+    </div>
+  </div>
+</div>
+
+<div class="container mx-auto pt-16 space-y-6">
   <!-- 1) Header -->
   <div class="text-center space-y-2">
-    <h2 class="text-2xl font-extrabold uppercase"><%= @event.title %></h2>
-    <p class="text-gray-600">
-      <%= @event.start_date.strftime("%-d %b %Y") %>
-       -
-      <%= @event.end_date.strftime("%-d %b %Y") %>
-    </p>
-    <h3 class="text-lg font-semibold mt-4">Overall Results</h3>
+    <h3 class="text-2xl font-semibold mt-4">Overall Results</h3>
     <div class="flex justify-center space-x-4 mt-2">
-      <%= link_to "Home", root_path, class: "btn btn-ghost" %>
       <%= link_to "Results PDF", "#", class: "btn btn-primary" %>
     </div>
   </div>
