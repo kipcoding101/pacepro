@@ -7,48 +7,141 @@
   <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
   <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
 </head>
-<body class="flex h-screen">
-  <aside class="w-64 bg-base-200 p-4">
-    <h2 class="text-xl font-bold mb-6">Admin</h2>
-    <ul class="menu menu-vertical">
-      <li>
-        <%= link_to 'Dashboard', admin_root_path,
-            class: (current_page?(admin_root_path) ? 'active' : '') %>
-      </li>
-      <li>
-        <%= link_to 'Events', admin_events_path,
-            class: (controller_name == 'events' ? 'active' : '') %>
-      </li>
-      <li>
-        <%= link_to 'Error Logs', admin_error_logs_path,
-            class: (controller_name == 'error_logs' ? 'active' : '') %>
-      </li>
-      <li>
-        <%= link_to 'API Keys', admin_api_keys_path,
-            class: (controller_name == 'api_keys' ? 'active' : '') %>
-      </li>
-      <li class="mt-4">
-        <%= link_to 'Main Site', root_path, class: 'btn btn-ghost w-full text-left' %>
-      </li>
-      <li class="mt-2">
-        <%= button_to 'Logout', destroy_user_session_path,
-              method: :delete,
-              class: 'btn btn-error w-full text-left' %>
-      </li>
-    </ul>
-  </aside>
+  <body class="bg-base text-white font-sans min-h-screen">
+    <div class="flex min-h-screen">
+      <!-- Sidebar -->
+      <aside class="w-80 bg-base p-6 text-white flex flex-col justify-between">
+        <div>
+          <h1 class="text-lg font-bold mb-4">Admin</h1>
+          <ul class="menu menu-vertical space-y-1">
+            <li>
+              <%= link_to admin_root_path, class: (current_page?(admin_root_path) ? 'active' : '') do %>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 256 256">
+                  <path d="M224,115.55V208a16..."/>
+                </svg>
+                Dashboard
+              <% end %>
+            </li>
 
-  <div class="flex-1 flex flex-col">
-    <header class="bg-base-100 p-4 shadow">
-      <h1 class="text-2xl font-semibold">
-        <%= content_for?(:title) ? yield(:title) : 'Admin Dashboard' %>
-      </h1>
-    </header>
+            <li>
+              <%= link_to admin_events_path, class: (controller_name == 'events' ? 'active' : '') do %>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 256 256">
+                  <path d="M208,32H184V24a8..."/>
+                </svg>
+                Events
+              <% end %>
+            </li>
 
-    <main class="p-6 overflow-auto">
-      <%= render 'shared/flash_messages' %>
-      <%= yield %>
-    </main>
-  </div>
-</body>
+            <li>
+              <%= link_to admin_error_logs_path, class: (controller_name == 'error_logs' ? 'active' : '') do %>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 256 256">
+                  <path d="M144,92a12,12,0..."/>
+                </svg>
+                Error Logs
+              <% end %>
+            </li>
+
+            <li>
+              <%= link_to admin_api_keys_path, class: (controller_name == 'api_keys' ? 'active' : '') do %>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 256 256">
+                  <path d="M160,16A80.07,80..."/>
+                </svg>
+                API Keys
+              <% end %>
+            </li>
+
+            <li class="mt-4">
+              <%= link_to root_path, class: '' do %>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 256 256">
+                  <path d="M128,24A104,104..."/>
+                </svg>
+                Main Site
+              <% end %>
+            </li>
+
+            <li class="mt-2">
+              <%= button_to destroy_user_session_path, method: :delete, class: 'w-full text-left', form_class: 'w-full' do %>
+                <div class="flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 256 256">
+                    <path d="M224,128a8,8,0..."/>
+                  </svg>
+                  Sign Out
+                </div>
+              <% end %>
+            </li>
+          </ul>
+        </div>
+      </aside>
+
+
+      <!-- Content -->
+      <main class="flex-1 bg-base p-6">
+        <!-- Page Header -->
+        <h2 class="text-3xl font-bold mb-6">Dashboard</h2>
+
+        <!-- Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          <div class="card bg-primary text-white">
+            <div class="card-body">
+              <h3 class="card-title">Total Events</h3>
+              <p class="text-2xl font-bold">120</p>
+            </div>
+          </div>
+          <div class="card bg-primary text-white">
+            <div class="card-body">
+              <h3 class="card-title">Active Events</h3>
+              <p class="text-2xl font-bold">30</p>
+            </div>
+          </div>
+          <div class="card bg-primary text-white">
+            <div class="card-body">
+              <h3 class="card-title">Completed Events</h3>
+              <p class="text-2xl font-bold">90</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Upcoming Events Table -->
+        <h3 class="text-2xl font-bold mb-4">Upcoming Events</h3>
+        <div class="overflow-x-auto border border-accent rounded-xl">
+          <table class="table table-zebra w-full">
+            <thead class="bg-accent text-white">
+              <tr>
+                <th>Event Name</th>
+                <th>Date</th>
+                <th>Location</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Marathon of Hope</td>
+                <td class="text-textLight">2024-08-15</td>
+                <td class="text-textLight">Central Park, NY</td>
+                <td>
+                  <span class="badge badge-primary px-4 py-1">Scheduled</span>
+                </td>
+              </tr>
+              <tr>
+                <td>Triathlon Challenge</td>
+                <td class="text-textLight">2024-09-22</td>
+                <td class="text-textLight">Miami Beach, FL</td>
+                <td>
+                  <span class="badge badge-primary px-4 py-1">Scheduled</span>
+                </td>
+              </tr>
+              <tr>
+                <td>Cycling Grand Tour</td>
+                <td class="text-textLight">2024-10-10</td>
+                <td class="text-textLight">Rocky Mountains, CO</td>
+                <td>
+                  <span class="badge badge-primary px-4 py-1">Scheduled</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </main>
+    </div>
+  </body>
 </html>
