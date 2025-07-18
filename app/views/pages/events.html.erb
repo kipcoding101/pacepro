@@ -14,16 +14,25 @@
 
     </div>
   </section>
-  <% { "Upcoming" => @upcoming_events, "Live Today" => @live_events, "Past" => @past_events }.each do |section, events| %>
-      <% next if events.blank? %>
-      <h2 class="text-2xl font-semibold mt-8 mb-4"><%= section %></h2>
-      <div class="overflow-x-auto py-4 px-4">
-        <div class="flex space-x-6">
-          <%= render partial: "pages/events/card", collection: events, as: :event %>
-        </div>
+  <% { "Live Today" => @live_events}.each do |section, events| %>
+    <% next if events.blank? %>
+    <h2 class="text-2xl font-semibold mt-8 mb-4"><%= section %></h2>
+    <div class="overflow-x-auto py-4 px-4">
+      <div class="flex gap-2 justify-center">
+        <%= render partial: "pages/events/card", collection: events, as: :event %>
       </div>
-    <% end %>
-  </div>
+    </div>
+  <% end %>
+  <% { "Upcoming" => @upcoming_events, "Past" => @past_events }.each do |section, events| %>
+    <% next if events.blank? %>
+    <h2 class="text-2xl font-semibold mt-8 mb-4"><%= section %></h2>
+    <div class="overflow-x-auto py-4 px-4">
+      <div class="flex gap-2 justify-center">
+        <%= render partial: "pages/events/card", collection: events, as: :event %>
+      </div>
+    </div>
+  <% end %>
+</div>
 
 
     
