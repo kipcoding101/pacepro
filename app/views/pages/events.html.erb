@@ -18,7 +18,7 @@
     <% next if events.blank? %>
     <h2 class="text-2xl font-semibold mt-8 mb-4"><%= section %></h2>
     <div class="overflow-x-auto py-4 px-4">
-      <div class="flex gap-2 justify-center">
+      <div class="flex flex-col gap-2 items-center">
         <%= render partial: "pages/events/card", collection: events, as: :event %>
       </div>
     </div>
@@ -27,7 +27,7 @@
     <% next if events.blank? %>
     <h2 class="text-2xl font-semibold mt-8 mb-4"><%= section %></h2>
     <div class="overflow-x-auto py-4 px-4">
-      <div class="flex gap-2 justify-center">
+      <div class="flex flex-col gap-2 items-center">
         <%= render partial: "pages/events/card", collection: events, as: :event %>
       </div>
     </div>
